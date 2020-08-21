@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -14,7 +15,7 @@ import argparse
 import random
 import bet_parser
 
-BET_365_INPLAY = "https://www.48-365365.com/#/IP/B1"
+BET_365_INPLAY = "https://www.bet365/#/IP/B1"
 BET_365_SPORTS = "https://www.bet365.com/#/HO"
 BET_365 = "https://www.bet365.com"
 PROXY_PAGE = "https://free-proxy-list.net/"
@@ -88,13 +89,20 @@ def main():
     global driver
     print(f"using proxy {PROXY_USED}")
 
+    # selenium_grid_url = "http://198.0.0.1:4444/wd/hub"
+    #
+    # capabilities = DesiredCapabilities.FIREFOX.copy()
+    # capabilities['platform'] = "ANDROID"
+    # capabilities['version'] = "10"
+
     ua = UserAgent()
     userAgent = ua.random
     print(userAgent)
     options = webdriver.ChromeOptions()
     options.add_argument(f'user-agent={userAgent}')
-
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_argument('--window-size=1420,1080')
+    options.add_argument('--disable-gpu')
+    #options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(executable_path='C:\Windows\chromedriver.exe', options=DRIVER_OPTIONS, desired_capabilities=DRIVER_CAPABILITIES)
 
     #driver = webdriver.Chrome("chromedriver.exe", options=DRIVER_OPTIONS, desired_capabilities=DRIVER_CAPABILITIES)
