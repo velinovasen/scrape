@@ -9,11 +9,12 @@ from selenium.webdriver.common.proxy import Proxy, ProxyType
 from contextlib import suppress
 from re import match
 from time import sleep
+from fake_useragent import UserAgent
 import argparse
 import random
 import bet_parser
 
-BET_365_INPLAY = "https://www.bet365.com/#/IP"
+BET_365_INPLAY = "https://www.48-365365.com/#/IP/B1"
 BET_365_SPORTS = "https://www.bet365.com/#/HO"
 BET_365 = "https://www.bet365.com"
 PROXY_PAGE = "https://free-proxy-list.net/"
@@ -87,9 +88,18 @@ def main():
     global driver
     print(f"using proxy {PROXY_USED}")
 
-    driver = webdriver.Chrome("chromedriver.exe", chrome_options=DRIVER_OPTIONS, desired_capabilities=DRIVER_CAPABILITIES)
+    ua = UserAgent()
+    userAgent = ua.random
+    print(userAgent)
+    options = webdriver.ChromeOptions()
+    options.add_argument(f'user-agent={userAgent}')
 
-    driver.get(BET_365)
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    driver = webdriver.Chrome(executable_path='C:\Windows\chromedriver.exe', options=DRIVER_OPTIONS, desired_capabilities=DRIVER_CAPABILITIES)
+
+    #driver = webdriver.Chrome("chromedriver.exe", options=DRIVER_OPTIONS, desired_capabilities=DRIVER_CAPABILITIES)
+
+    driver.get(BET_365_INPLAY)
 
     while True:
         with suppress(Exception):
@@ -103,7 +113,7 @@ def main():
             left_menu = left_menu_div[0].find_elements_by_class_name("wn-Classification")
             break
     for link in left_menu:
-        if link.text.startswith("Live"):
+        if link.text.startswith("На живо"):
             link.click()
             break
 
